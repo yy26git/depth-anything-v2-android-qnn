@@ -1,0 +1,52 @@
+{
+    "model_id": "depth_anything_v2",
+    "model_name": "Depth-Anything-V2",
+    "runtime": "onnx",
+    "precision": "w8a16",
+    "tool_versions": {
+        "qairt": "2.50.0.260828221209",
+        "onnx_runtime": "1.27.1"
+    },
+    "model_files": {
+        "depth_anything_v2.onnx": {
+            "inputs": {
+                "image": {
+                    "shape": [
+                        1,
+                        3,
+                        518,
+                        518
+                    ],
+                    "dtype": "uint16",
+                    "quantization_parameters": {
+                        "scale": 0.00002101432801282499,
+                        "zero_point": 9979
+                    },
+                    "io_type": "image",
+                    "image_metadata": {},
+                    "value_range": [
+                        0.0,
+                        1.0
+                    ]
+                }
+            },
+            "outputs": {
+                "depth_estimates": {
+                    "shape": [
+                        1,
+                        1,
+                        518,
+                        518
+                    ],
+                    "dtype": "uint16",
+                    "description": "Monocular depth map",
+                    "quantization_parameters": {
+                        "scale": 0.0002007981966016814,
+                        "zero_point": 0
+                    }
+                }
+            }
+        }
+    },
+    "use_case": "Depth Estimation"
+}

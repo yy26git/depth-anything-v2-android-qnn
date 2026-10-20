@@ -1,0 +1,28 @@
+# ============================================================================
+# SYNTHETIC FIXTURE - NOT a recorded device session.
+# Hand-written to exercise scripts/evaluate-live-session.py. No device, model or
+# throughput claim rests on this file. Its EVIDENCE requirement fails on purpose.
+#
+# Fixture intent: every depth rate line is healthy and there is no `camera status=`
+# line at all - the capture was filtered too tightly. This is deliberately NOT the
+# same as a camera that failed: the capture says nothing whatever about the camera,
+# so the honest verdict is that its state is UNKNOWN, not bad. Absent evidence must
+# never be reported as a pass, and must not be reported as a contradiction either.
+# Expected: CAMERA BLOCKED and no other requirement but EVIDENCE fails. As this file
+# stands the synthetic EVIDENCE failure outranks the block, so OVERALL FAIL, exit 1;
+# strip this header and the same capture exits 2, which is what a real capture
+# missing the camera line would do.
+# ============================================================================
+10-19 01:02:04.000  4242  4402 I DepthQNN: pipeline ready session=graph-inference backend=CPU note=CPU — QNN could not initialise, see HANDOVER 2.4
+10-19 01:02:11.900  4242  4410 I DepthQNN: depth rate inferences=5 fps=0.64 elapsedS=7.8 offered=164 droppedBusy=159 tooSmall=0 errors=0
+10-19 01:02:20.200  4242  4410 I DepthQNN: depth rate inferences=10 fps=0.62 elapsedS=16.1 offered=341 droppedBusy=331 tooSmall=0 errors=0
+10-19 01:02:28.500  4242  4410 I DepthQNN: depth rate inferences=15 fps=0.61 elapsedS=24.4 offered=520 droppedBusy=505 tooSmall=0 errors=0
+10-19 01:02:37.100  4242  4410 I DepthQNN: depth rate inferences=20 fps=0.61 elapsedS=33.0 offered=700 droppedBusy=680 tooSmall=0 errors=0
+10-19 01:02:45.700  4242  4410 I DepthQNN: depth rate inferences=25 fps=0.60 elapsedS=41.6 offered=880 droppedBusy=855 tooSmall=0 errors=0
+10-19 01:02:54.400  4242  4410 I DepthQNN: depth rate inferences=30 fps=0.60 elapsedS=50.3 offered=1060 droppedBusy=1030 tooSmall=0 errors=0
+10-19 01:03:03.200  4242  4410 I DepthQNN: depth rate inferences=35 fps=0.59 elapsedS=59.1 offered=1240 droppedBusy=1205 tooSmall=0 errors=0
+10-19 01:03:11.900  4242  4410 I DepthQNN: depth rate inferences=40 fps=0.59 elapsedS=67.8 offered=1420 droppedBusy=1380 tooSmall=0 errors=0
+10-19 01:03:20.600  4242  4410 I DepthQNN: depth rate inferences=45 fps=0.59 elapsedS=76.5 offered=1600 droppedBusy=1555 tooSmall=0 errors=0
+10-19 01:03:29.300  4242  4410 I DepthQNN: depth rate inferences=50 fps=0.59 elapsedS=85.2 offered=1780 droppedBusy=1730 tooSmall=0 errors=0
+10-19 01:03:38.100  4242  4410 I DepthQNN: depth rate inferences=55 fps=0.59 elapsedS=94.0 offered=1960 droppedBusy=1905 tooSmall=0 errors=0
+10-19 01:03:46.900  4242  4410 I DepthQNN: depth rate inferences=60 fps=0.58 elapsedS=102.8 offered=2140 droppedBusy=2080 tooSmall=0 errors=0

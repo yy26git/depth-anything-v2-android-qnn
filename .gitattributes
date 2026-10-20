@@ -1,0 +1,5 @@
+# Raw tensor fixtures must retain their exact IEEE-754 bytes.
+*.f32 binary
+# Preserve the upstream Windows wrapper and pinned source patch verbatim.
+gradlew.bat -text whitespace=cr-at-eol
+patches/*.patch -text whitespace=-blank-at-eol

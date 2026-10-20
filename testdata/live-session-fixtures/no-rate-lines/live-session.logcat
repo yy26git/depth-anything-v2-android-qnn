@@ -1,0 +1,18 @@
+# ============================================================================
+# SYNTHETIC FIXTURE - NOT a recorded device session.
+# Hand-written to exercise scripts/evaluate-live-session.py. No device, model or
+# throughput claim rests on this file. Its EVIDENCE requirement fails on purpose.
+#
+# Fixture intent: a capture that starts cleanly but never produces a single
+# `depth rate` report. The camera is streaming and the model loaded; depth never
+# reported. This is the shape a wrong logcat filter produces.
+# Expected: EVIDENCE FAIL ("absent evidence is not a slow session"), and UPDATES /
+# PROGRESS / DROPS / TOO_SMALL / ERRORS / SELF_CONSISTENCY / SPAN all FAIL because
+# they have no line to judge. CAMERA PASS (Streaming really is in this capture).
+# OVERALL FAIL, exit 1.
+# ============================================================================
+10-19 01:02:03.100  4242  4301 I DepthQNN: camera status=Streaming(description=back camera bound (implementation=CAMERA2, rotationDegrees=90, targetRotation=90))
+10-19 01:02:03.400  4242  4402 I DepthQNN: model asset loaded bytes=100234567
+10-19 01:02:03.900  4242  4402 E DepthQNN: strict QNN session failed, falling back to CPU
+10-19 01:02:04.000  4242  4402 I DepthQNN: pipeline ready session=graph-inference backend=CPU note=CPU — QNN could not initialise, see HANDOVER 2.4
+10-19 01:02:30.000  4242  4410 D DepthQNN: depth-infer: session closed

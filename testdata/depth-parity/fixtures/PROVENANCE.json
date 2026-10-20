@@ -1,0 +1,33 @@
+{
+  "__source__": {
+    "origin": "Qualcomm AI Hub depth-anything-v2-small w8a16 ONNX export, downloaded to /tmp/da2qnn on 2026-10-18",
+    "why_archived": "/tmp is swept; the reference graph and its external weights must survive so this comparison can be re-run without re-downloading.",
+    "onnx_sha256": "162c09e24c8d544e9034d3b985893db1bc59d684272acde0c62d46ae4ed43374",
+    "external_data_sha256": "b968987b8a4958113b44cb522111da954d623670c32f019d4e2d795300f2faf1"
+  },
+  "test_aerial_20m.jpg": {
+    "copied_from": "app/src/main/assets/test_aerial_20m.jpg",
+    "note": "the image the Android harness itself feeds the model"
+  },
+  "20m-altitude-10deg-down-from-horizontal-01.png": {
+    "copied_from": "generated-aerial-test-images/20m-altitude-10deg-down-from-horizontal-01.png"
+  },
+  "usa-commercial-arterial-01.png": {
+    "copied_from": "generated-aerial-test-images/usa-commercial-arterial-01.png"
+  },
+  "usa-residential-school-02.png": {
+    "copied_from": "generated-aerial-test-images/usa-residential-school-02.png"
+  },
+  "europe-old-town-street-01.png": {
+    "copied_from": "generated-aerial-test-images/europe-old-town-street-01.png"
+  },
+  "europe-suburban-roundabout-02.png": {
+    "copied_from": "generated-aerial-test-images/europe-suburban-roundabout-02.png"
+  },
+  "southeast-asia-market-corridor-01.png": {
+    "copied_from": "generated-aerial-test-images/southeast-asia-market-corridor-01.png"
+  },
+  "southeast-asia-tropical-arterial-02.png": {
+    "copied_from": "generated-aerial-test-images/southeast-asia-tropical-arterial-02.png"
+  }
+}

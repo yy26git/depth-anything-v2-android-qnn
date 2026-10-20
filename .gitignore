@@ -1,0 +1,16 @@
+# Local Android/Gradle state and generated output
+.DS_Store
+.gradle/
+.kotlin/
+.cxx/
+build/
+local.properties
+.gradle-deploy-lock/
+
+# Local model and runtime artifacts (pinned by testdata/runtime-uint16.json).
+# Keep these on disk; provision them before building a fresh checkout.
+app/libs/*.aar
+app/src/main/jniLibs/**/*.so
+app/src/main/cpp/ort_link/*.so
+app/src/main/assets/*.onnx
+testdata/depth-parity/source/*.data

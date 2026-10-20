@@ -1,0 +1,239 @@
+{
+  "schema": "depth-device-fixtures/1",
+  "reference": "Independent FP32 Depth Anything CPU baseline, not candidate-generated output",
+  "reference_model_sha256": "0c112459c0623ec0c3fc75c2343d99b1967600e27b921c29b76e6c928af008be",
+  "reference_npz_sha256": "72d8b3b17d9a2419cc3d7be90c990cb0b0bef5cacc0b87ec27b1beb293eeb790",
+  "inputs_npz_sha256": "bce1dfc133d2561545a066477c270708c7cb6c57352f84891898f645fd83533b",
+  "encoding": "little-endian float32, NCHW RGB/255, PIL bilinear518x518; normalization is embedded in graph",
+  "gates": {
+    "pearson_min": 0.99,
+    "mae_divided_by_reference_range_max": 0.01,
+    "nonfinite_max": 0
+  },
+  "fixtures": [
+    {
+      "index": 0,
+      "name": "20m-altitude-10deg-down-from-horizontal-01.png",
+      "original_image_sha256": "29ef0bbc4b25e20fed635800bfec344b22debb0a831a671b15f29ec9e3eefa70",
+      "held_out_of_new_trial_calibration": false,
+      "input": {
+        "path": "app/src/androidTest/assets/qnn-fixtures/0.input.f32",
+        "shape": [
+          1,
+          3,
+          518,
+          518
+        ],
+        "bytes": 3219888,
+        "sha256": "1cd3f65ca9f8fd3a89235fe7cead601a968b1abb8fe4c4cdab2f710e5233ab89"
+      },
+      "reference": {
+        "path": "app/src/androidTest/assets/qnn-fixtures/0.reference.f32",
+        "shape": [
+          1,
+          1,
+          518,
+          518
+        ],
+        "bytes": 1073296,
+        "sha256": "31c03adaf43a9d0140c5ae0c5b63657218c803f8ba6e8fdff238e881b1c12a74"
+      }
+    },
+    {
+      "index": 1,
+      "name": "europe-old-town-street-01.png",
+      "original_image_sha256": "11c138556e1cea211ade9d60d20c2ef83b680cadc5f842d0b72679e2a0a54104",
+      "held_out_of_new_trial_calibration": false,
+      "input": {
+        "path": "app/src/androidTest/assets/qnn-fixtures/1.input.f32",
+        "shape": [
+          1,
+          3,
+          518,
+          518
+        ],
+        "bytes": 3219888,
+        "sha256": "4e0d456109291c7c71d0c5809fc222872a03cca3fc6f599857aa397af148e5d9"
+      },
+      "reference": {
+        "path": "app/src/androidTest/assets/qnn-fixtures/1.reference.f32",
+        "shape": [
+          1,
+          1,
+          518,
+          518
+        ],
+        "bytes": 1073296,
+        "sha256": "d10a2a2d7b909604df2fa993d10476a162a92df3fb651ae2b587f042111fda3b"
+      }
+    },
+    {
+      "index": 2,
+      "name": "europe-suburban-roundabout-02.png",
+      "original_image_sha256": "0cea357fb414ec6a7c32e3d2de0a35f83351075ca5b5a6bd1e8dd56bd9e810c4",
+      "held_out_of_new_trial_calibration": false,
+      "input": {
+        "path": "app/src/androidTest/assets/qnn-fixtures/2.input.f32",
+        "shape": [
+          1,
+          3,
+          518,
+          518
+        ],
+        "bytes": 3219888,
+        "sha256": "11c3ed8463de1fa828f8791f3b48875aa5d5962743a8d4ca6e58d266d58af5c0"
+      },
+      "reference": {
+        "path": "app/src/androidTest/assets/qnn-fixtures/2.reference.f32",
+        "shape": [
+          1,
+          1,
+          518,
+          518
+        ],
+        "bytes": 1073296,
+        "sha256": "ef795b35da3ca66a541c91d734cbd82deeac8c95a2c7d8fb83c84d57aa95392e"
+      }
+    },
+    {
+      "index": 3,
+      "name": "southeast-asia-market-corridor-01.png",
+      "original_image_sha256": "eaaaa8833407e60787fdf50b83211946b5f24dad9b8baa56d464cf518e73e2ee",
+      "held_out_of_new_trial_calibration": false,
+      "input": {
+        "path": "app/src/androidTest/assets/qnn-fixtures/3.input.f32",
+        "shape": [
+          1,
+          3,
+          518,
+          518
+        ],
+        "bytes": 3219888,
+        "sha256": "b39a3be66bb6724d92d1c905ef59dd57f411f099764d413a9a48a9f80ae96778"
+      },
+      "reference": {
+        "path": "app/src/androidTest/assets/qnn-fixtures/3.reference.f32",
+        "shape": [
+          1,
+          1,
+          518,
+          518
+        ],
+        "bytes": 1073296,
+        "sha256": "3f692dc6a8b170f08a0dbfc7c8125adbcc682f87d3f87e717410e0310560f47d"
+      }
+    },
+    {
+      "index": 4,
+      "name": "southeast-asia-tropical-arterial-02.png",
+      "original_image_sha256": "4db7561d84d550628d1e99168b6eb86370f463fa1dc7ff9c588f0ee3b3410720",
+      "held_out_of_new_trial_calibration": false,
+      "input": {
+        "path": "app/src/androidTest/assets/qnn-fixtures/4.input.f32",
+        "shape": [
+          1,
+          3,
+          518,
+          518
+        ],
+        "bytes": 3219888,
+        "sha256": "e02f8c150543e06cb81c3bc0fb7f9cae1f2286f2c03331e8d03d201459d1c7d7"
+      },
+      "reference": {
+        "path": "app/src/androidTest/assets/qnn-fixtures/4.reference.f32",
+        "shape": [
+          1,
+          1,
+          518,
+          518
+        ],
+        "bytes": 1073296,
+        "sha256": "4dbfb796b532fc1a2248ad335d381a0738d9278b605a8f0437f73b194ec8099d"
+      }
+    },
+    {
+      "index": 5,
+      "name": "test_aerial_20m.jpg",
+      "original_image_sha256": "de140da9522a6ff554b94d1834f9294e7989773619a5114419ec0da11144fc9a",
+      "held_out_of_new_trial_calibration": false,
+      "input": {
+        "path": "app/src/androidTest/assets/qnn-fixtures/5.input.f32",
+        "shape": [
+          1,
+          3,
+          518,
+          518
+        ],
+        "bytes": 3219888,
+        "sha256": "9fb051aab9153fbe88861080d60e86e16aa10036e3bae9fd61e44f0e63e7d04e"
+      },
+      "reference": {
+        "path": "app/src/androidTest/assets/qnn-fixtures/5.reference.f32",
+        "shape": [
+          1,
+          1,
+          518,
+          518
+        ],
+        "bytes": 1073296,
+        "sha256": "e17d4113ea19ff93af2dcef0b2bc5f2cde4001dd1ddb34022141e656e441007b"
+      }
+    },
+    {
+      "index": 6,
+      "name": "usa-commercial-arterial-01.png",
+      "original_image_sha256": "8e500c753ea39943992971a70b7682b399e08da7de2fe8aa58aa9bab9b048d5d",
+      "held_out_of_new_trial_calibration": true,
+      "input": {
+        "path": "app/src/androidTest/assets/qnn-fixtures/6.input.f32",
+        "shape": [
+          1,
+          3,
+          518,
+          518
+        ],
+        "bytes": 3219888,
+        "sha256": "002d451b9e680a7a39daa599f47f6a03a30f3cd7ffb39f5ba8d357f4aa85d2b1"
+      },
+      "reference": {
+        "path": "app/src/androidTest/assets/qnn-fixtures/6.reference.f32",
+        "shape": [
+          1,
+          1,
+          518,
+          518
+        ],
+        "bytes": 1073296,
+        "sha256": "8d840f996de6e52c8d0c8d7d43269daefb6da662d4fd91a4cae11e47a76efa2e"
+      }
+    },
+    {
+      "index": 7,
+      "name": "usa-residential-school-02.png",
+      "original_image_sha256": "ba8a35a0a61d1b7c938030ce708c3f5b6eb27e96006e6aec251c8ff2d673f854",
+      "held_out_of_new_trial_calibration": true,
+      "input": {
+        "path": "app/src/androidTest/assets/qnn-fixtures/7.input.f32",
+        "shape": [
+          1,
+          3,
+          518,
+          518
+        ],
+        "bytes": 3219888,
+        "sha256": "c0cddd6b10c08a90b80ab02d6cce415745bfa8afe57f73b3accadb442e8643ff"
+      },
+      "reference": {
+        "path": "app/src/androidTest/assets/qnn-fixtures/7.reference.f32",
+        "shape": [
+          1,
+          1,
+          518,
+          518
+        ],
+        "bytes": 1073296,
+        "sha256": "53c9cc46afdfddca4c81603f4898d97f13d39bbe6e4aff5d36252fc01ced7e64"
+      }
+    }
+  ]
+}

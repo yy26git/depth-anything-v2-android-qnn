@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+    CAMERA is requested because the screen is a live depth view: preview plus a depth mask registered
+    over it. A denial therefore costs the whole screen, not one control, so it must produce a visible
+    recovery action rather than a crash or a blank view. The request happens once on launch and is not
+    re-fired by an unrelated resume.
+    -->
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <!--
+    required="false" is the load-bearing half. The QNN question the harness exists to answer is
+    answerable on a device with no camera, so this must never filter the app out of a store or
+    off an install target. MainActivity checks FEATURE_CAMERA_ANY at runtime and reports the
+    absence instead.
+    -->
+    <uses-feature
+        android:name="android.hardware.camera.any"
+        android:required="false" />
+
+    <application
+        android:label="Depth Anything V2 QNN"
+        android:supportsRtl="true"
+        android:hardwareAccelerated="true"
+        android:largeHeap="true"
+        android:extractNativeLibs="true"
+        android:theme="@android:style/Theme.Material.Light.NoActionBar">
+
+        <!--
+        libQnnHtpV68Stub.so declares libcdsprpc.so as a DT_NEEDED dependency, and that library is
+        not part of the QNN distribution — it lives in the vendor partition at
+        /vendor/lib64/libcdsprpc.so.
+
+        OnnxSessionFactory sets LD_LIBRARY_PATH to include /vendor/lib64 before loading, but that
+        cannot work here: Android freezes a process's linker search paths when it builds the app's
+        namespace, which happens before any application code runs. Without this declaration the
+        harness fails with:
+
+            dlopen failed: library "libcdsprpc.so" not found: needed by
+            .../lib/arm64/libQnnHtpV68Stub.so in namespace clns-4
+
+        and pre-loading the library by absolute path fails too, with "not accessible for the
+        namespace". Since Android 8 (Treble) the per-app namespace sandboxes vendor-partition
+        libraries away from app native code; being listed in /system/etc/public.libraries.txt does
+        not help, because that allowlist only covers the "default" namespace used by
+        System.loadLibrary, not the isolated namespace a bundled .so's own dlopen() runs in.
+
+        <uses-native-library> (API 30+) is the documented way to ask the OEM linker config for
+        access to a specific vendor library. This declaration grants the app access to the vendor library, and
+        required="false" keeps the harness installable on a device without the library — it will
+        then fail loudly at QNN load time rather than refusing to install.
+        -->
+        <uses-native-library
+            android:name="libcdsprpc.so"
+            android:required="false" />
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

@@ -1,0 +1,156 @@
+diff --git a/onnxruntime/core/optimizer/qdq_transformer/selectors_actions/qdq_selectors.cc b/onnxruntime/core/optimizer/qdq_transformer/selectors_actions/qdq_selectors.cc
+index 63c818d..a781896 100644
+--- a/onnxruntime/core/optimizer/qdq_transformer/selectors_actions/qdq_selectors.cc
++++ b/onnxruntime/core/optimizer/qdq_transformer/selectors_actions/qdq_selectors.cc
+@@ -195,7 +195,10 @@ bool DropQDQNodeGroupSelector::Check(const GraphViewer& graph_viewer, const Node
+     // "mode" defaults to "nearest" when absent. It is always present after Graph::Resolve() injects
+     // schema defaults; the absence check is a defensive fallback for hand-built/unresolved graphs.
+     const auto mode_iter = attrs.find("mode");
+-    if (mode_iter != attrs.end() && mode_iter->second.s() != "nearest") {
++    // QNN lowers a complete QDQ group with quantization parameters, rather than
++    // executing interpolation on raw integer codes as CPU QDQ elimination would.
++    if (mode_iter != attrs.end() && mode_iter->second.s() != "nearest" &&
++        !(allow_linear_resize_ && mode_iter->second.s() == "linear")) {
+       return false;
+     }
+     const auto coord_mode_iter = attrs.find("coordinate_transformation_mode");
+diff --git a/onnxruntime/core/optimizer/qdq_transformer/selectors_actions/qdq_selectors.h b/onnxruntime/core/optimizer/qdq_transformer/selectors_actions/qdq_selectors.h
+index 10d307b..d79db04 100644
+--- a/onnxruntime/core/optimizer/qdq_transformer/selectors_actions/qdq_selectors.h
++++ b/onnxruntime/core/optimizer/qdq_transformer/selectors_actions/qdq_selectors.h
+@@ -49,8 +49,9 @@ class NodeGroupSelector {
+ class DropQDQNodeGroupSelector : public NodeGroupSelector {
+  public:
+   explicit DropQDQNodeGroupSelector(bool allow_16bit = true, bool allow_4bit = true,
+-                                    bool allow_nonpositive_scale = true)
+-      : allow_16bit_(allow_16bit), allow_4bit_(allow_4bit), allow_nonpositive_scale_(allow_nonpositive_scale) {}
++                                    bool allow_nonpositive_scale = true, bool allow_linear_resize = false)
++      : allow_16bit_(allow_16bit), allow_4bit_(allow_4bit), allow_nonpositive_scale_(allow_nonpositive_scale),
++        allow_linear_resize_(allow_linear_resize) {}
+ 
+  private:
+   bool Check(const GraphViewer& graph_viewer, const Node& node, const Node* redundant_clip_node,
+@@ -60,6 +61,7 @@ class DropQDQNodeGroupSelector : public NodeGroupSelector {
+   bool allow_16bit_;
+   bool allow_4bit_;
+   bool allow_nonpositive_scale_;
++  bool allow_linear_resize_;
+ };
+ 
+ // Single DQ -> node.
+diff --git a/onnxruntime/core/optimizer/qdq_transformer/selectors_actions/shared/utils.cc b/onnxruntime/core/optimizer/qdq_transformer/selectors_actions/shared/utils.cc
+index 09edd12..8b5e1c0 100644
+--- a/onnxruntime/core/optimizer/qdq_transformer/selectors_actions/shared/utils.cc
++++ b/onnxruntime/core/optimizer/qdq_transformer/selectors_actions/shared/utils.cc
+@@ -180,9 +180,9 @@ static const OpVersionsAndSelector::OpVersionsMap GetRMSNormalizationOpVersionsM
+ }
+ 
+ /* Selector rules registration related */
+-void RegisterMiscSelectors(Selectors& qdq_selectors) {
++void RegisterMiscSelectors(Selectors& qdq_selectors, bool allow_linear_resize) {
+   /* register selectors for miscellaneous ops */
+-  std::unique_ptr<NodeGroupSelector> selector = std::make_unique<DropQDQNodeGroupSelector>();
++  std::unique_ptr<NodeGroupSelector> selector = std::make_unique<DropQDQNodeGroupSelector>(true, true, true, allow_linear_resize);
+   qdq_selectors.RegisterSelector(GetMiscOpVersionsMap(),
+                                  std::move(selector));
+ }
+@@ -335,8 +335,8 @@ void RegisterRMSNormalizationSelector(Selectors& qdq_selectors) {
+                                  std::move(selector));
+ }
+ 
+-void SelectorManager::CreateSelectors() {
+-  RegisterMiscSelectors(qdq_selectors_);
++void SelectorManager::CreateSelectors(bool allow_linear_resize) {
++  RegisterMiscSelectors(qdq_selectors_, allow_linear_resize);
+   RegisterDropDQSelectors(qdq_selectors_);
+   RegisterUnarySelectors(qdq_selectors_);
+   RegisterClipSelector(qdq_selectors_);
+@@ -369,8 +369,8 @@ void SelectorManager::InitializeSelectorsMap() {
+   }
+ }
+ 
+-SelectorManager::SelectorManager() {
+-  CreateSelectors();
++SelectorManager::SelectorManager(bool allow_linear_resize) {
++  CreateSelectors(allow_linear_resize);
+   InitializeSelectorsMap();
+ }
+ 
+@@ -413,7 +413,7 @@ std::vector<NodeGroup> SelectorManager::GetQDQSelections(const GraphViewer& grap
+ }
+ 
+ std::pair<std::vector<std::unique_ptr<NodeUnit>>, std::unordered_map<const Node*, const NodeUnit*>>
+-GetAllNodeUnits(const GraphViewer& graph_viewer, const logging::Logger& logger) {
++GetAllNodeUnits(const GraphViewer& graph_viewer, const logging::Logger& logger, bool allow_linear_resize) {
+   std::vector<std::unique_ptr<NodeUnit>> node_unit_holder;
+   std::unordered_map<const Node*, const NodeUnit*> node_unit_map;
+ 
+@@ -425,7 +425,7 @@ GetAllNodeUnits(const GraphViewer& graph_viewer, const logging::Logger& logger)
+   };
+ 
+   // Get QDQ NodeUnits first
+-  QDQ::SelectorManager selector_mgr;
++  QDQ::SelectorManager selector_mgr(allow_linear_resize);
+   const auto qdq_selections = selector_mgr.GetQDQSelections(graph_viewer, logger);
+ 
+   for (const auto& qdq_selection : qdq_selections) {
+diff --git a/onnxruntime/core/optimizer/qdq_transformer/selectors_actions/shared/utils.h b/onnxruntime/core/optimizer/qdq_transformer/selectors_actions/shared/utils.h
+index d59e4fd..56f90c8 100644
+--- a/onnxruntime/core/optimizer/qdq_transformer/selectors_actions/shared/utils.h
++++ b/onnxruntime/core/optimizer/qdq_transformer/selectors_actions/shared/utils.h
+@@ -69,7 +69,7 @@ class Selectors {
+ // class that manages qdq node group selections
+ class SelectorManager {
+  public:
+-  SelectorManager();
++  explicit SelectorManager(bool allow_linear_resize = false);
+   ~SelectorManager();
+ 
+   // Methods that finds and returns a vector of QDQ::NodeGroup in a given graph
+@@ -83,7 +83,7 @@ class SelectorManager {
+ 
+   void InitializeSelectorsMap();
+ 
+-  void CreateSelectors();
++  void CreateSelectors(bool allow_linear_resize);
+ 
+   ORT_DISALLOW_COPY_ASSIGNMENT_AND_MOVE(SelectorManager);
+ };
+@@ -97,7 +97,8 @@ class SelectorManager {
+ // We currently have a bit of a mess with generic things like this to get all the node units being in the optimizer
+ // library whereas it should be able to be used by an EP with no dependency on optimizers.
+ std::pair<std::vector<std::unique_ptr<NodeUnit>>, std::unordered_map<const Node*, const NodeUnit*>>
+-GetAllNodeUnits(const GraphViewer& graph_viewer, const logging::Logger& logger);
++GetAllNodeUnits(const GraphViewer& graph_viewer, const logging::Logger& logger,
++                bool allow_linear_resize = false);
+ 
+ }  // namespace QDQ
+ }  // namespace onnxruntime
+diff --git a/onnxruntime/core/providers/qnn/builder/opbuilder/resize_op_builder.cc b/onnxruntime/core/providers/qnn/builder/opbuilder/resize_op_builder.cc
+index 4e38530..efe0196 100644
+--- a/onnxruntime/core/providers/qnn/builder/opbuilder/resize_op_builder.cc
++++ b/onnxruntime/core/providers/qnn/builder/opbuilder/resize_op_builder.cc
+@@ -267,6 +267,9 @@ Status ResizeOpBuilder::ProcessAttributesAndOutputs(QnnModelWrapper& qnn_model_w
+   const std::string nearest_mode = GetOnnxAttr(node_helper, onnx_nearest_mode_attr);
+   const bool is_npu_backend = IsNpuBackend(qnn_model_wrapper.GetQnnBackendType());
+   std::string qnn_op_type = "Resize";
++  LOGS(logger, WARNING) << "QNN Resize candidate node=" << node_unit.Name()
++                        << " inputType=" << qnn_model_wrapper.GetQnnTensorWrapper(input_names[0]).GetTensorDataType()
++                        << " nodeUnitType=" << static_cast<int>(node_unit.UnitType());
+ 
+   if (is_npu_backend && input_rank == 4 && interp_mode == "nearest") {
+     // Translate Resize with
+diff --git a/onnxruntime/core/providers/qnn/ort_api.h b/onnxruntime/core/providers/qnn/ort_api.h
+index 600949d..f9fb7fb 100644
+--- a/onnxruntime/core/providers/qnn/ort_api.h
++++ b/onnxruntime/core/providers/qnn/ort_api.h
+@@ -125,7 +125,8 @@ std::vector<const Node*> Graph__Nodes(const Graph& graph);
+ inline std::pair<std::vector<std::unique_ptr<NodeUnit>>, std::unordered_map<const Node*, const NodeUnit*>>
+ GetQDQNodeUnits(const GraphViewer& graph_viewer, const logging::Logger& logger) {
+ #if BUILD_QNN_EP_STATIC_LIB
+-  return QDQ::GetAllNodeUnits(graph_viewer, logger);
++  // QNN retains QDQ encodings in its quantized operator lowering. CPU elimination stays strict.
++  return QDQ::GetAllNodeUnits(graph_viewer, logger, true /*allow_linear_resize*/);
+ #else
+   return QDQ::GetAllNodeUnits(&graph_viewer, logger);
+ #endif

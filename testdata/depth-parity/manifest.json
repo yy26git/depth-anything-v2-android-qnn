@@ -1,0 +1,181 @@
+{
+  "schema": "depth-parity/1",
+  "note": "Hashes cover the .onnx protobuf AND the external .data weights separately; hashing the protobuf alone cannot detect a change to weights stored outside it. Paths are relative to this file.",
+  "preprocessing": {
+    "scaling": "RGB / 255",
+    "reason": "Both Qualcomm AI Hub exports normalize internally: immediately after the input boundary the w8a16 graph applies Sub then Div with the ImageNet mean and std (node_sub / node_div). Pre-normalizing externally would apply it twice.",
+    "resize": {
+      "width": 518,
+      "height": 518,
+      "resample": "bilinear",
+      "color": "RGB"
+    }
+  },
+  "reference": {
+    "onnx": "source/depth_anything_v2.onnx",
+    "external_data": "source/depth_anything_v2.data",
+    "onnx_sha256": "162c09e24c8d544e9034d3b985893db1bc59d684272acde0c62d46ae4ed43374",
+    "external_data_sha256": "b968987b8a4958113b44cb522111da954d623670c32f019d4e2d795300f2faf1",
+    "provenance": {
+      "origin": "Qualcomm AI Hub depth-anything-v2-small w8a16 ONNX export, downloaded to /tmp/da2qnn on 2026-10-18",
+      "why_archived": "/tmp is swept; the reference graph and its external weights must survive so this comparison can be re-run without re-downloading.",
+      "onnx_sha256": "162c09e24c8d544e9034d3b985893db1bc59d684272acde0c62d46ae4ed43374",
+      "external_data_sha256": "b968987b8a4958113b44cb522111da954d623670c32f019d4e2d795300f2faf1"
+    },
+    "quantization": {
+      "image_scale": 2.101432801282499e-05,
+      "image_zero_point": 9979,
+      "depth_estimates_scale": 0.0002007981966016814,
+      "view_zero_point": 0
+    },
+    "graph_input": {
+      "name": "image",
+      "elem_type": "UINT16",
+      "shape": [
+        1,
+        3,
+        518,
+        518
+      ]
+    },
+    "graph_output": {
+      "name": "depth_estimates",
+      "elem_type": "UINT16",
+      "shape": [
+        1,
+        1,
+        518,
+        518
+      ]
+    },
+    "node_count": 1452,
+    "op_histogram": {
+      "Add": 83,
+      "Concat": 1,
+      "Conv": 31,
+      "ConvTranspose": 2,
+      "DequantizeLinear": 578,
+      "Div": 1,
+      "Gelu": 12,
+      "LayerNormalization": 28,
+      "MatMul": 72,
+      "Mul": 12,
+      "QuantizeLinear": 476,
+      "Relu": 16,
+      "Reshape": 53,
+      "Resize": 5,
+      "Slice": 4,
+      "Softmax": 12,
+      "Split": 12,
+      "Sub": 1,
+      "Transpose": 53
+    }
+  },
+  "candidate": {
+    "onnx": "../../app/src/main/assets/depth_anything_v2.onnx",
+    "sha256": "5a3e2f26b4b9ff7176d76fe53973bb3508d6bc6e065cf46f75438ef21f44f9b4",
+    "converter": "scripts/make-w8a16-htp-model.py",
+    "converter_options": "defaults (boundary-only float I/O; no Resize or Conv rewrite)",
+    "graph_input": {
+      "name": "image",
+      "elem_type": "FLOAT",
+      "shape": [
+        1,
+        3,
+        518,
+        518
+      ]
+    },
+    "graph_output": {
+      "name": "depth_estimates_updated",
+      "elem_type": "FLOAT",
+      "shape": [
+        1,
+        1,
+        518,
+        518
+      ]
+    },
+    "node_count": 1450,
+    "op_histogram": {
+      "Add": 83,
+      "Concat": 1,
+      "Conv": 31,
+      "ConvTranspose": 2,
+      "DequantizeLinear": 577,
+      "Div": 1,
+      "Gelu": 12,
+      "LayerNormalization": 28,
+      "MatMul": 72,
+      "Mul": 12,
+      "QuantizeLinear": 475,
+      "Relu": 16,
+      "Reshape": 53,
+      "Resize": 5,
+      "Slice": 4,
+      "Softmax": 12,
+      "Split": 12,
+      "Sub": 1,
+      "Transpose": 53
+    },
+    "boundary": "Original UINT16 I/O retained; external weights inlined without arithmetic changes",
+    "provenance": "AI Hub compile jp4e78e1g, original W8A16 optimized ONNX; weights inlined only. Eight fixtures exact versus original."
+  },
+  "criterion": {
+    "exact_output_codes": true,
+    "rationale": "The candidate's float output is requantized with the reference's own output scale and zero-point, then compared to the reference's uint16 output codes. Exact codes are required because the codes are the observable output of the reference model.",
+    "optional_rewrite_atol": 1e-05,
+    "optional_rewrite_rtol": 1e-05
+  },
+  "fixtures": [
+    {
+      "name": "20m-altitude-10deg-down-from-horizontal-01.png",
+      "path": "fixtures/20m-altitude-10deg-down-from-horizontal-01.png",
+      "sha256": "29ef0bbc4b25e20fed635800bfec344b22debb0a831a671b15f29ec9e3eefa70",
+      "copied_from": "generated-aerial-test-images/20m-altitude-10deg-down-from-horizontal-01.png"
+    },
+    {
+      "name": "europe-old-town-street-01.png",
+      "path": "fixtures/europe-old-town-street-01.png",
+      "sha256": "11c138556e1cea211ade9d60d20c2ef83b680cadc5f842d0b72679e2a0a54104",
+      "copied_from": "generated-aerial-test-images/europe-old-town-street-01.png"
+    },
+    {
+      "name": "europe-suburban-roundabout-02.png",
+      "path": "fixtures/europe-suburban-roundabout-02.png",
+      "sha256": "0cea357fb414ec6a7c32e3d2de0a35f83351075ca5b5a6bd1e8dd56bd9e810c4",
+      "copied_from": "generated-aerial-test-images/europe-suburban-roundabout-02.png"
+    },
+    {
+      "name": "southeast-asia-market-corridor-01.png",
+      "path": "fixtures/southeast-asia-market-corridor-01.png",
+      "sha256": "eaaaa8833407e60787fdf50b83211946b5f24dad9b8baa56d464cf518e73e2ee",
+      "copied_from": "generated-aerial-test-images/southeast-asia-market-corridor-01.png"
+    },
+    {
+      "name": "southeast-asia-tropical-arterial-02.png",
+      "path": "fixtures/southeast-asia-tropical-arterial-02.png",
+      "sha256": "4db7561d84d550628d1e99168b6eb86370f463fa1dc7ff9c588f0ee3b3410720",
+      "copied_from": "generated-aerial-test-images/southeast-asia-tropical-arterial-02.png"
+    },
+    {
+      "name": "test_aerial_20m.jpg",
+      "path": "fixtures/test_aerial_20m.jpg",
+      "sha256": "de140da9522a6ff554b94d1834f9294e7989773619a5114419ec0da11144fc9a",
+      "copied_from": "app/src/main/assets/test_aerial_20m.jpg",
+      "note": "the image the Android harness itself feeds the model"
+    },
+    {
+      "name": "usa-commercial-arterial-01.png",
+      "path": "fixtures/usa-commercial-arterial-01.png",
+      "sha256": "8e500c753ea39943992971a70b7682b399e08da7de2fe8aa58aa9bab9b048d5d",
+      "copied_from": "generated-aerial-test-images/usa-commercial-arterial-01.png"
+    },
+    {
+      "name": "usa-residential-school-02.png",
+      "path": "fixtures/usa-residential-school-02.png",
+      "sha256": "ba8a35a0a61d1b7c938030ce708c3f5b6eb27e96006e6aec251c8ff2d673f854",
+      "copied_from": "generated-aerial-test-images/usa-residential-school-02.png"
+    }
+  ]
+}

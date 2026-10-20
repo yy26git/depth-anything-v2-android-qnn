@@ -1,0 +1,96 @@
+{
+  "ort": "1.30.0",
+  "qairt": "2.50.0.260828",
+  "rationale": "Physical OnePlus9 strict QNN gate passed after QNN-only linear Resize QDQ grouping fix: 8/8 independent FP32 fixture comparisons and completed ORT profile with QNN=1 CPU=0. Original model unchanged.",
+  "files": {
+    "app/src/main/cpp/ort_include/onnxruntime_c_api.h": "e035e30c27e74c8c00e0f483e576e12b4067d17f12e9237fd6eff8b346c9b381",
+    "app/src/main/cpp/ort_link/libonnxruntime.so": "57a4fc0bede481aeb1a32fe28bbc517a15618ed1dd8ff8578e83726e7980ea8c",
+    "app/src/main/assets/depth_anything_v2.onnx": "5a3e2f26b4b9ff7176d76fe53973bb3508d6bc6e065cf46f75438ef21f44f9b4",
+    "app/src/main/jniLibs/arm64-v8a/libQnnHtp.so": "09e930b6af975bae23bcf6965ac2ce60f6b999aff37cb7eabe9b4d7c1bc3f264",
+    "app/src/main/jniLibs/arm64-v8a/libQnnHtpPrepare.so": "fb2580518a1072b2d32324727c187b8c8fc77a385ded839666eb5bc66cd0ad94",
+    "app/src/main/jniLibs/arm64-v8a/libQnnHtpV68.so": "10145b2e136af600c1478d6a352f904ffd78c76f3b1fe2273a2293186a13f7ad",
+    "app/src/main/jniLibs/arm64-v8a/libQnnHtpV68CalculatorStub.so": "2df88f5641404d03d8c260f99ea53d5ec31aa20eef671c1d6b6a4804ec15f9be",
+    "app/src/main/jniLibs/arm64-v8a/libQnnHtpV68Skel.so": "e97388c45019995caa75c3c5c963e1dcce50081045f0eb4486e6365cb2ad83d6",
+    "app/src/main/jniLibs/arm64-v8a/libQnnHtpV68Stub.so": "1270be8956345e08001007a47af0b64bded0917bb7a8290fccb1936652778ebb",
+    "app/src/main/jniLibs/arm64-v8a/libQnnIr.so": "2e40d5c9e843a2c583f59abbd6a09ab2f95c14f599aaee9226eaf8b10df3bc4f",
+    "app/src/main/jniLibs/arm64-v8a/libQnnSaver.so": "632ee1cd0f7f0855086e9da989a4725e437108dd5bf504bc9bc6ac535a9bc1a8",
+    "app/src/main/jniLibs/arm64-v8a/libQnnSystem.so": "b30bd9880dc48f6c5349185a7d45b326f8a064b10072e60094354fa23d9a2027",
+    "app/src/main/jniLibs/arm64-v8a/libc++_shared.so": "4397241b4bd20a8e579bfb41d21107857e12985f6a01ca0c2a5f83380d1270b4",
+    "app/src/main/cpp/ort_include/onnxruntime_error_code.h": "5ce3b054e798eced8d14f5b86e98692fd33470463f96194ce0700a2d53dd8721",
+    "app/src/main/cpp/ort_include/onnxruntime_ep_c_api.h": "e6c986c9e98583f8113b2c6bc3864814883b806d501cf24da4d239c45753e235",
+    "app/libs/onnxruntime-android-qnn-1.30.0.aar": "893cbcc76ea69d1f0b2f361d94205d48305b9fc65a869d89303b9bd20e320b54"
+  },
+  "qairt_source": "https://softwarecenter.qualcomm.com/api/download/software/sdks/Qualcomm_AI_Runtime_Community/All/2.50.0.260828/v2.50.0.260828.zip",
+  "qairt_zip_members": [
+    {
+      "member": "qairt/2.50.0.260828/lib/aarch64-android/libQnnHtp.so",
+      "sha256": "09e930b6af975bae23bcf6965ac2ce60f6b999aff37cb7eabe9b4d7c1bc3f264",
+      "bytes": 3978976,
+      "zip_crc32": 1430413217
+    },
+    {
+      "member": "qairt/2.50.0.260828/lib/aarch64-android/libQnnHtpPrepare.so",
+      "sha256": "fb2580518a1072b2d32324727c187b8c8fc77a385ded839666eb5bc66cd0ad94",
+      "bytes": 85026120,
+      "zip_crc32": 3876995323
+    },
+    {
+      "member": "qairt/2.50.0.260828/lib/aarch64-android/libQnnHtpV68CalculatorStub.so",
+      "sha256": "2df88f5641404d03d8c260f99ea53d5ec31aa20eef671c1d6b6a4804ec15f9be",
+      "bytes": 250872,
+      "zip_crc32": 761730313
+    },
+    {
+      "member": "qairt/2.50.0.260828/lib/aarch64-android/libQnnHtpV68Stub.so",
+      "sha256": "1270be8956345e08001007a47af0b64bded0917bb7a8290fccb1936652778ebb",
+      "bytes": 783992,
+      "zip_crc32": 3179675157
+    },
+    {
+      "member": "qairt/2.50.0.260828/lib/aarch64-android/libQnnIr.so",
+      "sha256": "2e40d5c9e843a2c583f59abbd6a09ab2f95c14f599aaee9226eaf8b10df3bc4f",
+      "bytes": 1955504,
+      "zip_crc32": 3829098818
+    },
+    {
+      "member": "qairt/2.50.0.260828/lib/aarch64-android/libQnnSaver.so",
+      "sha256": "632ee1cd0f7f0855086e9da989a4725e437108dd5bf504bc9bc6ac535a9bc1a8",
+      "bytes": 809568,
+      "zip_crc32": 3423442667
+    },
+    {
+      "member": "qairt/2.50.0.260828/lib/aarch64-android/libQnnSystem.so",
+      "sha256": "b30bd9880dc48f6c5349185a7d45b326f8a064b10072e60094354fa23d9a2027",
+      "bytes": 4068024,
+      "zip_crc32": 4258807035
+    },
+    {
+      "member": "qairt/2.50.0.260828/lib/hexagon-v68/unsigned/libQnnHtpV68.so",
+      "sha256": "10145b2e136af600c1478d6a352f904ffd78c76f3b1fe2273a2293186a13f7ad",
+      "bytes": 11404100,
+      "zip_crc32": 3043228506
+    },
+    {
+      "member": "qairt/2.50.0.260828/lib/hexagon-v68/unsigned/libQnnHtpV68Skel.so",
+      "sha256": "e97388c45019995caa75c3c5c963e1dcce50081045f0eb4486e6365cb2ad83d6",
+      "bytes": 10981860,
+      "zip_crc32": 836391133
+    }
+  ],
+  "model_provenance": "AI Hub jp4e78e1g / mnge2225m original W8A16 optimized ONNX, inline weights only; 8/8 exact-code CPU parity.",
+  "ort_source_build": {
+    "repository": "https://github.com/microsoft/onnxruntime",
+    "tag": "v1.30.0",
+    "commit": "f2c39fe2f838cf35ce7da92824f5a5e3ee6e88a7",
+    "native_and_main_java_source_changes": true,
+    "flags": "Release, Android arm64-v8a API26, QNN static_lib with matched SDK2.50, Java, no_telemetry, disable_ml_ops, disable_generation_ops, skip_tests",
+    "toolchain": "NDK27.2.12479018; CMake/Ninja; JDK17",
+    "build_script_sha256": "2f7e5264ccc0797634b763e9e32b0209b8f81720bfd4e9bbf8d8c3a66cd86d3c",
+    "note": "Two dependency download URLs changed to verified local archives. Native source differs only by the explicitly pinned QNN linear Resize grouping patch; main Java sources unchanged.",
+    "patch": {
+      "file": "patches/ort-1.30-qnn-linear-resize-grouping.patch",
+      "sha256": "16a2f94d6677f4388d39d0393cda1848e19f389af0f50bcb59619e3f02fb14de",
+      "scope": "QNN-only opt-in for linear Resize QDQ grouping; CPU defaults and original model unchanged; actual tensor type logged"
+    }
+  }
+}
